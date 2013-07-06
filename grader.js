@@ -28,7 +28,7 @@ var program = require('commander');
 var cheerio = require('cheerio');
 var HTMLFILE_DEFAULT = "index.html";
 var CHECKSFILE_DEFAULT = "checks.json";
-var URL_DEFAULT = "http://desolate-caverns-1625.herokuapp.com/"
+var URL_DEFAULT = "http://desolate-caverns-1625.herokuapp.com/";
 
 var assertFileExists = function(infile) {
     var instr = infile.toString();
@@ -39,17 +39,24 @@ var assertFileExists = function(infile) {
     return instr;
 };
 
+
 var assertURLExists = function(url) {
-	var htmlFile = "url-index.html";
-  rest.get(url).on('complete', function(result) {
-  	if (result instanceof Error) {
-         console.error('Error: ' + util.format(result.message));
-     } else {
-         console.error("Wrote %s to %s", url, htmlFile);
-         fs.writeFileSync(htmlFile, result);
-     }
+	var now = new Date();
+	var htmlFile = "index-"+now.toJSON()+".html";
+	console.log("URL = "+url+" Write "+htmlFile); 
+	rest.get(url).on('complete', function(result, response) {
+	console.log(util.inspect({result: result, response: reponse}));
+		/*
+		if (result instanceof Error) {
+        console.error('Error: ' + util.format(result.message));
+		} else {
+			console.log(util.inspect({result: result}));
+			fs.writeFileSync(htmlFile, result);
+		}
+		*/
 	});
-	// test the return header for 200
+};
+
 	return htmlFile;
 };
 
@@ -64,7 +71,7 @@ var loadChecks = function(checksfile) {
 var checkHtmlFile = function(htmlfile, checksfile) {
     $ = cheerioHtmlFile(htmlfile);
     var checks = loadChecks(checksfile).sort();
-		
+
     var out = {};
     for(var ii in checks) {
         var present = $(checks[ii]).length > 0;
@@ -91,7 +98,7 @@ if(require.main == module) {
 			htmlFile = program.url;
 		}
 		console.log("Check "+htmlFile);
-    var checkJson = checkHtmlFile(program.file, program.checks);
+    var checkJson = checkHtmlFile(htmlFile, program.checks);
     var outJson = JSON.stringify(checkJson, null, 4);
     console.log(outJson);
 } else {
