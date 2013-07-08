@@ -96,6 +96,7 @@ if(require.main == module) {
 			});
 		})
     .parse(process.argv);
+// if no option provided
 		if(process.argv.length <= 2) {
 				checkJson = checkHtmlFile(htmlFile, program.checks);
 				var outJson = JSON.stringify(checkJson, null, 4); 
