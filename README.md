@@ -1,1 +1,1 @@
-This is the homework 3 of the Coursera Start-up Engineering class
+This is the homework of the Coursera Start-up Engineering class
